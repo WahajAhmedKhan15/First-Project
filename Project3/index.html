@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables</title>
+    <style>
+:root {
+--BaseColorValue: #ffc600;
+--SpacingValue: 10px;
+--BlurValue: 0px;
+}
+img {
+padding: var(--SpacingValue);
+background: var(--BaseColorValue);
+filter: blur(var(--BlurValue));
+}
+body {
+text-align: center;
+background: #193549;
+color: white;
+font-family: 'helvetica neue', sans-serif;
+font-weight: 100;
+font-size: 50px;
+}
+.controls {
+margin-bottom: 50px;
+}
+input {
+width: 100px;
+}
+</style>
+</head>
+<body>
+    <h2>Update CSS Variables with JS</h2>
+    <div class="controls">
+      <label>Spacing:</label>
+      <input type="range" name="SpacingValue" min="10" max="200" value="10" data-sizing="px">
+  
+      <label>Blur:</label>
+      <input type="range" name="BlurValue" min="0" max="25" value="0" data-sizing="px">
+  
+      <label>Base Color</label>
+      <input type="color" name="BaseColorValue" value="#ffc600">
+    </div>
+    <img src="https://media.gettyimages.com/photos/quaideazam-picture-id184944186?s=612x612">
+</body>
+<script>
+    const inputs = document.querySelectorAll(".controls input");
+const handleUpdate = function () 
+{
+  const suffix=this.dataset.sizing || "" ;      //get data sizing variable 
+  document.documentElement.style.setProperty(`--${this.name}`,this.value+suffix); //change css 
+}
+inputs.forEach((e) => 
+{
+  e.addEventListener("change", handleUpdate)
+})
+</script>
+</html>
