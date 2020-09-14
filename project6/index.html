@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+html {
+  box-sizing: border-box;
+  background: brown;
+  font-family: 'helvetica neue';
+  font-size: 20px;
+  font-weight: 200;
+}
+input {
+  width: 100%;
+  padding: 20px;
+}
+.frm {
+  max-width: 400px;
+  margin: 50px auto;
+}
+.suggestions li {
+    padding: 10px;
+  background: white;
+} 
+
+.hl {
+  background:rgb(221, 216, 216);
+}
+</style>
+</head>
+<body>
+    <form class="frm">
+        <input type="text" class="search" placeholder="Enter City or State">
+        <ul class="suggestions">
+          <li>Search for a city or State.</li>
+        </ul>
+      </form> 
+</body>
+<script>
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+const cities=[];
+async function getCities(){
+fetch(endpoint).
+then(res=>res.json()).
+then(res2=>cities.push(...res2))
+}
+getCities();
+function findMatches(wordToMatch,cities){
+  return cities.filter((place)=>
+  {
+        const regex=new RegExp(wordToMatch,"gi")
+        return place.city.match(regex) || place.state.match(regex)
+  })
+}
+function displayMatches()
+{
+  const matchArray=findMatches(this.value,cities)
+  const html=matchArray.map(place=>
+  {
+    const regex=new RegExp(this.value,"gi");
+    const cityName=place.city.replace(regex,`<span class='hl'>${this.value}</span> `)
+    const stateName=place.city.replace(regex,`<span class='hl'>${this.value}</span> `)
+    return `<li> <span> ${cityName} , ${stateName} </span> <span> ${place.population} </span> </li>`
+  }).join("")
+  suggestions.innerHTML=html
+}
+const searchInput=document.querySelector(".search");
+const suggestions=document.querySelector(".suggestions")
+searchInput.addEventListener("change",displayMatches)
+searchInput.addEventListener("keyup",displayMatches)
+</script>
+</html>
